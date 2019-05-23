@@ -1,21 +1,19 @@
-import os
-import tweepy
+from flask import Flask, jsonify
+from flask_cors import CORS, cross_origin
 
-consumerKey = os.environ['BIGFOOT_CLASSINATOR_TWITTER_CONSUMER_KEY']
-consumerSecret = os.environ['BIGFOOT_CLASSINATOR_TWITTER_CONSUMER_SECRET']
-accessKey = os.environ['BIGFOOT_CLASSINATOR_TWITTER_ACCESS_KEY']
-accessSecret = os.environ['BIGFOOT_CLASSINATOR_TWITTER_ACCESS_SECRET']
+# create the flask application
+app = Flask(__name__)
 
-class BigfootClassinatorStreamListener(tweepy.StreamListener):
-    def on_status(self, status):
-      print(status.text)
-      api.update_status("This is a reply test.", in_reply_to_status_id=status.id_str, auto_populate_reply_metadata=True)
+# /info route returns information about the application
+@app.route('/info', methods=['GET'])
+@cross_origin()
+def info_route():
+  return jsonify({
+    'app'         : "Bigfoot Classinator Twitter Client",
+    'version'     : "1.0.0",
+    'attribution' : "AI by DataRobot"
+  })
 
-auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
-auth.set_access_token(accessKey, accessSecret)
-api = tweepy.API(auth)
-
-
-streamListener = BigfootClassinatorStreamListener()
-stream = tweepy.Stream(auth = api.auth, listener=streamListener)
-stream.filter(track=['#BigfootClassinator'])
+# kick off the flask
+if __name__ == '__main__':
+  app.run()
