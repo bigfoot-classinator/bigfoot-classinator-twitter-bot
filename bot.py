@@ -49,6 +49,10 @@ class BigfootClassinatorStreamListener(tweepy.StreamListener):
       # log it all
       print(id, text, coords, longitude, latitude, classination)
 
+    def on_error(self, status_code):
+      print("Error: ", status_code)
+      print("Disconnecting stream")
+      return False
 
 # authenticate
 auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
