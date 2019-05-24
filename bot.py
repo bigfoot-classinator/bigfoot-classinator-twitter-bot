@@ -23,7 +23,7 @@ class BigfootClassinatorStreamListener(tweepy.StreamListener):
     def on_status(self, tweet):
 
       # get the data from the tweet
-      id = tweet.str_id
+      id = tweet.id_str
       text = tweet.text
       coords = tweet.coordinates
 
