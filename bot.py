@@ -20,19 +20,20 @@ MESSAGES = {
 
 # this class receives tweets as they arrive
 class BigfootClassinatorStreamListener(tweepy.StreamListener):
-    def on_status(self, status):
+    def on_status(self, tweet):
+
+      # get the data from the tweet
+      id = tweet.str_id
+      text = tweet.text
+      coords = tweet.coordinates
 
       # remove the hashtag from the string
-      sighting = status.text.lower().replace("#bigfootclassinator", "")
+      sighting = text.lower().replace("#bigfootclassinator", "")
 
       # get the coordinates
-      print(status.coordinates)
-
       longitude, latitude = -82.340507, 39.332019
-      if status.coordinates:
-        longitude, latitude = status.coordinates.coordinates
-
-      print(longitude, latitude)
+      if coords is not None:
+        longitude, latitude = coords['coordinates']
 
       # process the request
       request_json = { 'latitude': latitude, 'longitude': longitude, 'sighting': sighting }
@@ -43,7 +44,11 @@ class BigfootClassinatorStreamListener(tweepy.StreamListener):
       message = MESSAGES[classination]
 
       # announce the classination to the world
-      api.update_status(message, in_reply_to_status_id=status.id_str, auto_populate_reply_metadata=True)
+      api.update_status(message, in_reply_to_status_id=id, auto_populate_reply_metadata=True)
+
+      # log it all
+      print(id, text, coords, longitude, latitude, classination)
+
 
 # authenticate
 auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
