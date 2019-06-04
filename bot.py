@@ -31,7 +31,7 @@ class BigfootClassinatorStreamListener(tweepy.StreamListener):
       sighting = text.lower().replace("#bigfootclassinator", "")
 
       # get the coordinates
-      longitude, latitude = -82.340507, 39.332019
+      longitude, latitude = 0.0, 0.0
       if coords is not None:
         longitude, latitude = coords['coordinates']
 
